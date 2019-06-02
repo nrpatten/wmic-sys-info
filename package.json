@@ -1,0 +1,35 @@
+{
+  "name": "wmic-sys-info",
+  "version": "0.0.1",
+  "description": "Get wmic system information.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "GPU",
+    "CPU",
+    "RAM",
+    "OS",
+    "MOUSE",
+    "KEYBOARD",
+    "SOUNDCARD",
+    "HDD",
+    "WMIC"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nrpatten/wmic-sys-info.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nrpatten/wmic-sys-info/issues"
+  },
+  "homepage": "https://github.com/nrpatten/wmic-sys-info",
+  "author": "Nathan Patten (NRPatten)",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
