@@ -7,15 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "GPU",
-    "CPU",
-    "RAM",
-    "OS",
-    "MOUSE",
-    "KEYBOARD",
-    "SOUNDCARD",
-    "HDD",
-    "WMIC"
+    "gpu",
+    "cpu",
+    "ram",
+    "os",
+    "mouse",
+    "keyboard",
+    "soundcard",
+    "hdd",
+    "windows"
   ],
   "directories": {
     "lib": "lib"
@@ -31,5 +31,11 @@
   "author": "Nathan Patten (NRPatten)",
   "license": "MIT",
   "dependencies": {
+  },
+  "os": [
+    "win32"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
   }
 }
