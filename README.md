@@ -6,7 +6,7 @@
 [![Git Stars](https://img.shields.io/github/stars/nrpatten/wmic-sys-info.svg?color=success)](https://github.com/nrpatten/wmic-sys-info/stargazers)
 [![npm downloads](https://img.shields.io/npm/dt/wmic-sys-info.svg?label=npm%20downloads)](https://www.npmjs.com/package/wmic-sys-info)
 [![Known Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/nrpatten/wmic-sys-info.svg?color=success)](https://github.com/nrpatten/wmic-sys-info)
-## Wmic System Info v0.0.1
+## Node Wmic (Windows Management Instrumentation Command-Line) System Info Package
 * Windows 7 and up Only
 ## install:
 * `npm i wmic-sys-info` or `npm i git://github.com/nrpatten/wmic-sys-info/`

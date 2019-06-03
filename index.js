@@ -1,7 +1,16 @@
 'use strict';
+// ==================================================================================
+// index.js
+// ----------------------------------------------------------------------------------
+// Description:   Windows Management Instrumentation Command-Line System Information
+//                - library for Node.js
+// Copyright:     (c) 2019
+// Author:        Nathan Patten (NRPatten)
+// ----------------------------------------------------------------------------------
+// License:       MIT
+// ==================================================================================
 
 const exec = require('child_process').exec;
-const platform = require('os').platform();
 const parser = require('./lib/parser.js');
 const results = [];
 let result;
@@ -35,9 +44,9 @@ function dataValue(args) {
   return result.toFixed(0) + unit;
 }
 
-function getVideoController(callback) {
-  return new Promise(function(resolve) {
-    exec('wmic path win32_VideoController', (error, stdout, stderr) => {
+function getVideoController() {
+  return new Promise(function(resolve, reject) {
+    exec('wmic path win32_VideoController', (error, stdout) => {
       if (error) {
         console.error(`gpu-info - exec error: ${error}`);
         return reject(error);
@@ -67,9 +76,9 @@ function getVideoController(callback) {
   });
 }
 
-function getDesktopmonitor(callback) {
+function getDesktopmonitor() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_Desktopmonitor', (error, stdout, stderr) => {
+    exec('wmic path Win32_Desktopmonitor', (error, stdout) => {
       if (error) {
         console.error(`monitor-info - exec error: ${error}`);
         return reject(error);
@@ -88,9 +97,9 @@ function getDesktopmonitor(callback) {
   });
 }
 
-function getProcessor(callback) {
+function getProcessor() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_Processor', (error, stdout, stderr) => {
+    exec('wmic path Win32_Processor', (error, stdout) => {
       if (error) {
         console.error(`processor-info - exec error: ${error}`);
         return reject(error);
@@ -119,9 +128,9 @@ function getProcessor(callback) {
   });
 }
 
-function getBaseBoard(callback) {
+function getBaseBoard() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_BaseBoard', (error, stdout, stderr) => {
+    exec('wmic path Win32_BaseBoard', (error, stdout) => {
       if (error) {
         console.error(`mobo-info - exec error: ${error}`);
         return reject(error);
@@ -142,9 +151,9 @@ function getBaseBoard(callback) {
   });
 }
 
-function getBIOS(callback) {
+function getBIOS() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_BIOS', (error, stdout, stderr) => {
+    exec('wmic path Win32_BIOS', (error, stdout) => {
       if (error) {
         console.error(`bios-info - exec error: ${error}`);
         return reject(error);
@@ -170,9 +179,9 @@ function getBIOS(callback) {
   });
 }
 
-function getDiskDrive(callback) {
+function getDiskDrive() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_DiskDrive', (error, stdout, stderr) => {
+    exec('wmic path Win32_DiskDrive', (error, stdout) => {
       if (error) {
         console.error(`drive-info - exec error: ${error}`);
         return reject(error);
@@ -202,9 +211,9 @@ function getDiskDrive(callback) {
   });
 }
 
-function getLogicalDisk(callback) {
+function getLogicalDisk() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_LogicalDisk', (error, stdout, stderr) => {
+    exec('wmic path Win32_LogicalDisk', (error, stdout) => {
       if (error) {
         console.error(`localdrive-info - exec error: ${error}`);
         return reject(error);
@@ -225,9 +234,9 @@ function getLogicalDisk(callback) {
   });
 }
 
-function getMemoryDevice(callback) {
+function getMemoryDevice() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_PhysicalMemory', (error, stdout, stderr) => {
+    exec('wmic path Win32_PhysicalMemory', (error, stdout) => {
       if (error) {
         console.error(`memeory-info - exec error: ${error}`);
         return reject(error);
@@ -248,9 +257,9 @@ function getMemoryDevice(callback) {
   });
 }
 
-function getOS(callback) {
+function getOS() {
   return new Promise(function(resolve, reject) {
-    exec('wmic os', (error, stdout, stderr) => {
+    exec('wmic os', (error, stdout) => {
       if (error) {
         console.error(`os-info - exec error: ${error}`);
         return reject(error);
@@ -270,9 +279,9 @@ function getOS(callback) {
   });
 }
 
-function getKeyboard(callback) {
+function getKeyboard() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_Keyboard', (error, stdout, stderr) => {
+    exec('wmic path Win32_Keyboard', (error, stdout) => {
       if (error) {
         console.error(`keyboard-info - exec error: ${error}`);
         return reject(error);
@@ -290,9 +299,9 @@ function getKeyboard(callback) {
   });
 }
 
-function getMouse(callback) {
+function getMouse() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_PointingDevice', (error, stdout, stderr) => {
+    exec('wmic path Win32_PointingDevice', (error, stdout) => {
       if (error) {
         console.error(`mouse-info - exec error: ${error}`);
         return reject(error);
@@ -310,9 +319,9 @@ function getMouse(callback) {
   });
 }
 
-function getSoundDevice(callback) {
+function getSoundDevice() {
   return new Promise(function(resolve, reject) {
-    exec('wmic sounddev', (error, stdout, stderr) => {
+    exec('wmic sounddev', (error, stdout) => {
       if (error) {
         console.error(`sound-info - exec error: ${error}`);
         return reject(error);
