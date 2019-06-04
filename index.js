@@ -11,10 +11,15 @@
 // ==================================================================================
 
 const exec = require('child_process').exec;
-const parser = require('./lib/parser.js');
+const XMLParser = require('./lib/xml2json');
+const parser = require('./lib/parser');
+const fs = require('fs');
 const results = [];
+
 let result;
 let unit;
+let res;
+
 
 function dataValue(args) {
   if (args == 0) {
@@ -42,6 +47,40 @@ function dataValue(args) {
     unit = 'TB';
   }
   return result.toFixed(0) + unit;
+}
+
+function getNvidiaSmi() {
+  return new Promise((resolve, reject) => {
+    try {
+      fs.stat('C:\\Progra~1\\NVIDIA~1\\NVSMI\\nvidia-smi.exe', (err) => {
+        if (!err) {
+          const spawn = require('child_process').spawn('C:\\Progra~1\\NVIDIA~1\\NVSMI\\nvidia-smi', ['-x','-q']);
+          spawn.stdout.on('data', (data) => {
+            res += new Buffer(data,'utf-8').toString();
+          });
+          spawn.stdout.on('end', (data) => {
+            var x2js = new XMLParser();
+            var json = x2js.xml_str2json(res);
+            for(let i in json) {
+              var item = json;
+              results.push({
+               "driver_version": item[i].driver_version,
+               "cuda_version": item[i].cuda_version,
+               "attached_gpus": item[i].attached_gpus,
+               "gpu": item[i].gpu
+              });
+            }
+            resolve(results);
+          });
+        }
+        else if (err.code === 'ENOENT') {
+          resolve('Sorry nvidia-smi was not found on your system');
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 function getVideoController() {
@@ -349,6 +388,7 @@ exports.getProcessor = getProcessor;
 exports.getBaseBoard = getBaseBoard;
 exports.getDiskDrive = getDiskDrive;
 exports.getKeyboard = getKeyboard;
+exports.getNvidiaSmi = getNvidiaSmi;
 exports.getMouse = getMouse;
 exports.getBIOS = getBIOS;
 exports.getOS = getOS;
