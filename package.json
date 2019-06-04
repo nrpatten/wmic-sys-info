@@ -1,6 +1,6 @@
 {
   "name": "wmic-sys-info",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Get wmic system information.",
   "main": "index.js",
   "scripts": {
@@ -30,8 +30,7 @@
   "homepage": "https://github.com/nrpatten/wmic-sys-info",
   "author": "Nathan Patten (NRPatten)",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "os": [
     "win32"
   ],
