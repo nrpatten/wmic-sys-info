@@ -30,4 +30,4 @@ wsi.getProcessor().then(function(data) {
 * `getKeyboard()` KeyBoard Info
 * `getMouse()` Mouse Info
 * `getSoundDevice()` Sound Device Info
-* `getNvidiaSmi()` Sound Device Info, Note! Testing.
+* `getNvidiaSmi()` Nvidia GPU Device Info, Note! Testing.
