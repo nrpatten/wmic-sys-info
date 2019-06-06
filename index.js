@@ -72,9 +72,9 @@ function getNvidiaSmi() {
             }
             resolve(results);
           });
-        }
-        else if (err.code === 'ENOENT') {
-          resolve('Sorry nvidia-smi was not found on your system');
+        } else
+        if (err.code === 'ENOENT') {
+          resolve('Sorry nvidia-smi was not found on your system or you have OEM drivers installed');
         }
       });
     } catch (error) {
