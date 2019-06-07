@@ -13,6 +13,7 @@
 ## Usage:
 ```javascript
 const wsi = require('wmic-sys-info');
+
 wsi.getProcessor().then(function(data) {
   console.log(data);
 }).catch(error => console.log(error));
@@ -30,4 +31,4 @@ wsi.getProcessor().then(function(data) {
 * `getKeyboard()` KeyBoard Info
 * `getMouse()` Mouse Info
 * `getSoundDevice()` Sound Device Info
-* `getNvidiaSmi()` Nvidia GPU Device Info, Note! Testing.
+* `getNvidiaSmi()` Nvidia GPU Device Info, Note! nvidia-smi only works with GTX, RTX and Tesla (It may work with other cards but not tested).
