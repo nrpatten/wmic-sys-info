@@ -17,7 +17,7 @@ let result;
 let unit;
 
 function dataValue(args) {
-  if (args == 0) {
+  if (args === 0) {
     result = 0;
     unit = '';
   }
@@ -57,7 +57,7 @@ function getVideoController() {
         var year = parseInt(date.substr(0,4));
         var month = parseInt(date.substr(4,2))-1;
         var day = parseInt(date.substr(6,2));
-        date = new Date(year, month, day); 
+        date = new Date(year, month, day);
         results.push({
           "Status": item[i].Status,
           "Manufacturer": item[i].AdapterCompatibility,
@@ -71,7 +71,7 @@ function getVideoController() {
           "DriverDate": date.toDateString()
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -92,7 +92,7 @@ function getDesktopmonitor() {
           "DeviceID": item[i].DeviceID
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -123,7 +123,7 @@ function getProcessor() {
           "VirtualizationEnabled": item[i].VirtualizationFirmwareEnabled
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -146,7 +146,7 @@ function getBaseBoard() {
           "SerialNumber": item[i].SerialNumber
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -164,7 +164,7 @@ function getBIOS() {
         var year = parseInt(date.substr(0,4));
         var month = parseInt(date.substr(4,2))-1;
         var day = parseInt(date.substr(6,2));
-        date = new Date(year, month, day); 
+        date = new Date(year, month, day);
         results.push({
           "Status": item[i].Status,
           "Manufacturer": item[i].Manufacturer,
@@ -174,7 +174,7 @@ function getBIOS() {
           "Date": date.toDateString()
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -206,7 +206,7 @@ function getDiskDrive() {
           "TracksPerCylinder": item[i].TracksPerCylinder
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -229,7 +229,7 @@ function getLogicalDisk() {
           "SerialNumber": item[i].VolumeSerialNumber
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -252,7 +252,7 @@ function getMemoryDevice() {
           "Capacity": dataValue(item[i].Capacity)
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -274,7 +274,7 @@ function getOS() {
           "SystemDrive": item[i].SystemDrive
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -294,7 +294,7 @@ function getKeyboard() {
           "Name": item[i].Name
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -314,7 +314,7 @@ function getMouse() {
           "Name": item[i].Name
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -335,7 +335,7 @@ function getSoundDevice() {
           "ProductName": item[i].ProductName
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
