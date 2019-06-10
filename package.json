@@ -15,7 +15,8 @@
     "keyboard",
     "soundcard",
     "hdd",
-    "windows"
+    "windows",
+    "nvidia-smi"
   ],
   "directories": {
     "lib": "lib"

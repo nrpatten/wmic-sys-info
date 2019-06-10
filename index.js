@@ -11,10 +11,15 @@
 // ==================================================================================
 
 const exec = require('child_process').exec;
-const parser = require('./lib/parser.js');
+const XMLParser = require('./lib/xml2json');
+const parser = require('./lib/parser');
+const fs = require('fs');
 const results = [];
+
 let result;
 let unit;
+let res;
+
 
 function dataValue(args) {
   if (args === 0) {
@@ -44,12 +49,45 @@ function dataValue(args) {
   return result.toFixed(0) + unit;
 }
 
+function getNvidiaSmi() {
+  return new Promise((resolve, reject) => {
+    try {
+      fs.stat('C:\\Progra~1\\NVIDIA~1\\NVSMI\\nvidia-smi.exe', (err) => {
+        if (!err) {
+          const spawn = require('child_process').spawn('C:\\Progra~1\\NVIDIA~1\\NVSMI\\nvidia-smi', ['-x','-q']);
+          spawn.stdout.on('data', (data) => {
+            res += new Buffer(data,'utf-8').toString();
+          });
+          spawn.stdout.on('end', (data) => {
+            var x2js = new XMLParser();
+            var json = x2js.xml_str2json(res);
+            for(let i in json) {
+              var item = json;
+              results.push({
+               "driver_version": item[i].driver_version,
+               "cuda_version": item[i].cuda_version,
+               "attached_gpus": item[i].attached_gpus,
+               "gpu": item[i].gpu
+              });
+            }
+            return resolve(results);
+          });
+        } else
+        if (err.code === 'ENOENT') {
+          return reject('Sorry nvidia-smi was not found on your system or you have OEM drivers installed');
+        }
+      });
+    } catch (error) {
+      return reject(error);
+    }
+  });
+}
+
 function getVideoController() {
   return new Promise(function(resolve, reject) {
     exec('wmic path win32_VideoController', (error, stdout) => {
       if (error) {
-        console.error(`gpu-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`gpu-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -80,8 +118,7 @@ function getDesktopmonitor() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_Desktopmonitor', (error, stdout) => {
       if (error) {
-        console.error(`monitor-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`monitor-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -101,8 +138,7 @@ function getProcessor() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_Processor', (error, stdout) => {
       if (error) {
-        console.error(`processor-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`processor-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -132,8 +168,7 @@ function getBaseBoard() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_BaseBoard', (error, stdout) => {
       if (error) {
-        console.error(`mobo-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`mobo-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -155,8 +190,7 @@ function getBIOS() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_BIOS', (error, stdout) => {
       if (error) {
-        console.error(`bios-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`bios-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -183,8 +217,7 @@ function getDiskDrive() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_DiskDrive', (error, stdout) => {
       if (error) {
-        console.error(`drive-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`drive-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -215,8 +248,7 @@ function getLogicalDisk() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_LogicalDisk', (error, stdout) => {
       if (error) {
-        console.error(`localdrive-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`localdrive-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -238,8 +270,7 @@ function getMemoryDevice() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_PhysicalMemory', (error, stdout) => {
       if (error) {
-        console.error(`memeory-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`memeory-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -261,8 +292,7 @@ function getOS() {
   return new Promise(function(resolve, reject) {
     exec('wmic os', (error, stdout) => {
       if (error) {
-        console.error(`os-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`os-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -283,8 +313,7 @@ function getKeyboard() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_Keyboard', (error, stdout) => {
       if (error) {
-        console.error(`keyboard-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`keyboard-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -303,8 +332,7 @@ function getMouse() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_PointingDevice', (error, stdout) => {
       if (error) {
-        console.error(`mouse-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`mouse-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -323,8 +351,7 @@ function getSoundDevice() {
   return new Promise(function(resolve, reject) {
     exec('wmic sounddev', (error, stdout) => {
       if (error) {
-        console.error(`sound-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`sound-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -349,6 +376,7 @@ exports.getProcessor = getProcessor;
 exports.getBaseBoard = getBaseBoard;
 exports.getDiskDrive = getDiskDrive;
 exports.getKeyboard = getKeyboard;
+exports.getNvidiaSmi = getNvidiaSmi;
 exports.getMouse = getMouse;
 exports.getBIOS = getBIOS;
 exports.getOS = getOS;
