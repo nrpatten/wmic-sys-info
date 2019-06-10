@@ -22,7 +22,7 @@ let res;
 
 
 function dataValue(args) {
-  if (args == 0) {
+  if (args === 0) {
     result = 0;
     unit = '';
   }
@@ -70,15 +70,15 @@ function getNvidiaSmi() {
                "gpu": item[i].gpu
               });
             }
-            resolve(results);
+            return resolve(results);
           });
         } else
         if (err.code === 'ENOENT') {
-          resolve('Sorry nvidia-smi was not found on your system or you have OEM drivers installed');
+          return reject('Sorry nvidia-smi was not found on your system or you have OEM drivers installed');
         }
       });
     } catch (error) {
-      reject(error);
+      return reject(error);
     }
   });
 }
@@ -87,8 +87,7 @@ function getVideoController() {
   return new Promise(function(resolve, reject) {
     exec('wmic path win32_VideoController', (error, stdout) => {
       if (error) {
-        console.error(`gpu-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`gpu-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -110,7 +109,7 @@ function getVideoController() {
           "DriverDate": date.toDateString()
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -119,8 +118,7 @@ function getDesktopmonitor() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_Desktopmonitor', (error, stdout) => {
       if (error) {
-        console.error(`monitor-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`monitor-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -131,7 +129,7 @@ function getDesktopmonitor() {
           "DeviceID": item[i].DeviceID
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -140,8 +138,7 @@ function getProcessor() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_Processor', (error, stdout) => {
       if (error) {
-        console.error(`processor-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`processor-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -162,7 +159,7 @@ function getProcessor() {
           "VirtualizationEnabled": item[i].VirtualizationFirmwareEnabled
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -171,8 +168,7 @@ function getBaseBoard() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_BaseBoard', (error, stdout) => {
       if (error) {
-        console.error(`mobo-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`mobo-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -185,7 +181,7 @@ function getBaseBoard() {
           "SerialNumber": item[i].SerialNumber
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -194,8 +190,7 @@ function getBIOS() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_BIOS', (error, stdout) => {
       if (error) {
-        console.error(`bios-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`bios-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -213,7 +208,7 @@ function getBIOS() {
           "Date": date.toDateString()
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -222,8 +217,7 @@ function getDiskDrive() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_DiskDrive', (error, stdout) => {
       if (error) {
-        console.error(`drive-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`drive-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -245,7 +239,7 @@ function getDiskDrive() {
           "TracksPerCylinder": item[i].TracksPerCylinder
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -254,8 +248,7 @@ function getLogicalDisk() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_LogicalDisk', (error, stdout) => {
       if (error) {
-        console.error(`localdrive-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`localdrive-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -268,7 +261,7 @@ function getLogicalDisk() {
           "SerialNumber": item[i].VolumeSerialNumber
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -277,8 +270,7 @@ function getMemoryDevice() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_PhysicalMemory', (error, stdout) => {
       if (error) {
-        console.error(`memeory-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`memeory-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -291,7 +283,7 @@ function getMemoryDevice() {
           "Capacity": dataValue(item[i].Capacity)
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -300,8 +292,7 @@ function getOS() {
   return new Promise(function(resolve, reject) {
     exec('wmic os', (error, stdout) => {
       if (error) {
-        console.error(`os-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`os-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -313,7 +304,7 @@ function getOS() {
           "SystemDrive": item[i].SystemDrive
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -322,8 +313,7 @@ function getKeyboard() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_Keyboard', (error, stdout) => {
       if (error) {
-        console.error(`keyboard-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`keyboard-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -333,7 +323,7 @@ function getKeyboard() {
           "Name": item[i].Name
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -342,8 +332,7 @@ function getMouse() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_PointingDevice', (error, stdout) => {
       if (error) {
-        console.error(`mouse-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`mouse-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -353,7 +342,7 @@ function getMouse() {
           "Name": item[i].Name
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
@@ -362,8 +351,7 @@ function getSoundDevice() {
   return new Promise(function(resolve, reject) {
     exec('wmic sounddev', (error, stdout) => {
       if (error) {
-        console.error(`sound-info - exec error: ${error}`);
-        return reject(error);
+        return reject(`sound-info - exec error: ${error}`);
       }
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
@@ -374,7 +362,7 @@ function getSoundDevice() {
           "ProductName": item[i].ProductName
         });
       }
-      resolve(results);
+      return resolve(results);
     });
   });
 }
