@@ -14,7 +14,7 @@
 ```javascript
 const wsi = require('wmic-sys-info');
 
-wsi.getProcessor().then(function(data) {
+wsi.getProcessor().then((data) => {
   console.log(data);
 }).catch(error => console.log(error));
 ```
@@ -26,6 +26,8 @@ wsi.getProcessor().then(function(data) {
 * `getMemoryDevice()` Memory Info
 * `getLogicalDisk()` Local Disk Info
 * `getDiskDrive()` Disk Drive Info
+* `getNetworkAdapter()` Network Adapter Info
+* `getNetworkIO()` Network IO Info
 * `getVideoController()` GPU Info
 * `getDesktopmonitor` Monitor Info
 * `getKeyboard()` KeyBoard Info

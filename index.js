@@ -367,16 +367,63 @@ function getSoundDevice() {
   });
 }
 
+function getNetworkAdapter() {
+  return new Promise(function(resolve, reject) {
+    exec('wmic path Win32_NetworkAdapter', (error, stdout) => {
+      if (error) {
+        return reject(`network-info - exec error: ${error}`);
+      }
+      let item = parser.parse(stdout);
+      for(var i = 0; i < item.length; i++) {
+        if (item[i].PhysicalAdapter === 'TRUE') {
+        results.push({
+          "Type": item[i].AdapterType,
+          "Name": item[i].Name,
+          "Description": item[i].Description,
+          "MACAddress": item[i].MACAddress,
+          "Speed": dataValue(item[i].Speed) + '/s'
+        });
+        }
+      }
+      return resolve(results);
+    });
+  });
+}
+
+function getNetworkIO() {
+  return new Promise(function(resolve, reject) {
+    exec('wmic path Win32_PerfRawData_Tcpip_NetworkInterface', (error, stdout) => {
+      if (error) {
+        return reject(`network-info - exec error: ${error}`);
+      }
+      let item = parser.parse(stdout);
+      for(var i = 0; i < item.length; i++) {
+        results.push({
+          "Name": item[i].Name,
+          "BytesReceivedPersec": item[i].BytesReceivedPersec,
+          "ReceivedErrors": item[i].PacketsReceivedErrors,
+          "BytesSentPersec": item[i].BytesSentPersec,
+          "OutboundErrors": item[i].PacketsOutboundErrors,
+          "CurrentBandwidth": item[i].CurrentBandwidth
+        });
+      }
+      return resolve(results);
+    });
+  });
+}
+
 exports.getVideoController = getVideoController;
 exports.getDesktopmonitor = getDesktopmonitor;
+exports.getNetworkAdapter = getNetworkAdapter;
 exports.getMemoryDevice = getMemoryDevice;
 exports.getSoundDevice = getSoundDevice;
 exports.getLogicalDisk = getLogicalDisk;
+exports.getNvidiaSmi = getNvidiaSmi;
 exports.getProcessor = getProcessor;
 exports.getBaseBoard = getBaseBoard;
 exports.getDiskDrive = getDiskDrive;
+exports.getNetworkIO = getNetworkIO;
 exports.getKeyboard = getKeyboard;
-exports.getNvidiaSmi = getNvidiaSmi;
 exports.getMouse = getMouse;
 exports.getBIOS = getBIOS;
 exports.getOS = getOS;

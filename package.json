@@ -1,6 +1,6 @@
 {
   "name": "wmic-sys-info",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Get wmic system information.",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,8 @@
     "soundcard",
     "hdd",
     "windows",
-    "nvidia-smi"
+    "nvidia-smi",
+    "network"
   ],
   "directories": {
     "lib": "lib"
