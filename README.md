@@ -24,6 +24,7 @@ wsi.getProcessor().then(data => {
 * `getOS()` Operating System Info
 * `getProcessor()` Processor Info
 * `getMemoryDevice()` Memory Info
+* `getMemoryUsage()` Memory Usage Info
 * `getLogicalDisk()` Local Disk Info
 * `getDiskDrive()` Disk Drive Info
 * `getDiskIO()` Disk Drive IO Info

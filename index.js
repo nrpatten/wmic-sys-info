@@ -309,6 +309,25 @@ function getMemoryDevice() {
   });
 }
 
+function getMemoryUsage() {
+  return new Promise(function(resolve, reject) {
+    exec('wmic path win32_operatingsystem', (error, stdout) => {
+      if (error) {
+        return reject(`memory-usage-info - exec error: ${error}`);
+      }
+      let item = parser.parse(stdout);
+      for(var i = 0; i < item.length; i++) {
+        results.push({
+          "TotalMemorySize": dataValue(item[i].TotalVisibleMemorySize * 1024),
+          "FreeMemory": dataValue(item[i].FreePhysicalMemory * 1024),
+          "UsedMemory": dataValue(item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024)
+        });
+      }
+      return resolve(results);
+    });
+  });
+}
+
 function getOS() {
   return new Promise(function(resolve, reject) {
     exec('wmic os', (error, stdout) => {
@@ -437,6 +456,7 @@ exports.getVideoController = getVideoController;
 exports.getDesktopmonitor = getDesktopmonitor;
 exports.getNetworkAdapter = getNetworkAdapter;
 exports.getMemoryDevice = getMemoryDevice;
+exports.getMemoryUsage = getMemoryUsage;
 exports.getSoundDevice = getSoundDevice;
 exports.getLogicalDisk = getLogicalDisk;
 exports.getNvidiaSmi = getNvidiaSmi;
