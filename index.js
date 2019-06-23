@@ -266,6 +266,27 @@ function getLogicalDisk() {
   });
 }
 
+function getDiskIO() {
+  return new Promise(function(resolve, reject) {
+    exec('wmic path win32_perfformatteddata_perfdisk_logicaldisk', (error, stdout) => {
+      if (error) {
+        return reject(`drive-io-info - exec error: ${error}`);
+      }
+      let item = parser.parse(stdout);
+      for(var i = 0; i < item.length; i++) {
+        results.push({
+          "Name": item[i].Name,
+          "WriteBytesSec": item[i].DiskWriteBytesPersec,
+          "ReadBytesSec": item[i].DiskReadBytesPersec,
+          "AvgBytesPerWrite": item[i].AvgDiskBytesPerWrite,
+          "AvgBytesPerRead": item[i].AvgDiskBytesPerRead
+        });
+      }
+      return resolve(results);
+    });
+  });
+}
+
 function getMemoryDevice() {
   return new Promise(function(resolve, reject) {
     exec('wmic path Win32_PhysicalMemory', (error, stdout) => {
@@ -424,6 +445,7 @@ exports.getBaseBoard = getBaseBoard;
 exports.getDiskDrive = getDiskDrive;
 exports.getNetworkIO = getNetworkIO;
 exports.getKeyboard = getKeyboard;
+exports.getDiskIO = getDiskIO;
 exports.getMouse = getMouse;
 exports.getBIOS = getBIOS;
 exports.getOS = getOS;
