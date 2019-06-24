@@ -320,7 +320,8 @@ function getMemoryUsage() {
         results.push({
           "TotalMemorySize": dataValue(item[i].TotalVisibleMemorySize * 1024),
           "FreeMemory": dataValue(item[i].FreePhysicalMemory * 1024),
-          "UsedMemory": dataValue(item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024)
+          "UsedMemory": dataValue(item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024),
+          "UsedPercent":  dataValue((item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024) / (item[i].TotalVisibleMemorySize * 1024) * 100) + '%'
         });
       }
       return resolve(results);
