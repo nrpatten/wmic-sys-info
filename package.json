@@ -1,6 +1,6 @@
 {
   "name": "wmic-sys-info",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Get wmic system information.",
   "main": "index.js",
   "scripts": {

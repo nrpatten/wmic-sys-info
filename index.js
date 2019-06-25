@@ -13,41 +13,13 @@
 const exec = require('child_process').exec;
 const XMLParser = require('./lib/xml2json');
 const parser = require('./lib/parser');
+const helpers = require('./lib/helpers');
 const fs = require('fs');
 const results = [];
 
 let result;
 let unit;
 let res;
-
-
-function dataValue(args) {
-  if (args === 0) {
-    result = 0;
-    unit = '';
-  }
-  if(args !== 0 && args < 1024) {
-    result = args;
-    unit = '';
-  }
-  if(args >= 1024 && args < Math.pow(1024, 2)) {
-    result = args / 1024;
-    unit = 'KB';
-  }
-  if(args >= Math.pow(1024, 2) && args < Math.pow(1024, 3)) {
-    result = args / Math.pow(1024, 2);
-    unit = 'MB';
-  }
-  if(args >= Math.pow(1024, 3) && args < Math.pow(1024, 4)) {
-    result = args / Math.pow(1024, 3);
-    unit = 'GB';
-  }
-  if(args >= Math.pow(1024, 4) && args < Math.pow(1024, 5)) {
-    result = args / Math.pow(1024, 4);
-    unit = 'TB';
-  }
-  return result.toFixed(0) + unit;
-}
 
 function getNvidiaSmi() {
   return new Promise((resolve, reject) => {
@@ -102,7 +74,7 @@ function getVideoController() {
           "Name": item[i].Name,
           "VideoProcessor": item[i].VideoProcessor,
           "DeviceID": item[i].DeviceID,
-          "Memory": dataValue(item[i].AdapterRAM),
+          "Memory": helpers.dataValue(item[i].AdapterRAM),
           "Resolution": item[i].CurrentHorizontalResolution + 'x' + item[i].CurrentVerticalResolution + '@' + item[i].CurrentBitsPerPixel,
           "RefreshRate": item[i].CurrentRefreshRate + 'Hz',
           "DriverVersion": item[i].DriverVersion,
@@ -225,7 +197,7 @@ function getDiskDrive() {
           "Status": item[i].Status,
           "Manufacturer": item[i].Manufacturer,
           "Model": item[i].Model,
-          "Size": dataValue(item[i].Size),
+          "Size": helpers.dataValue(item[i].Size),
           "SerialNumber": item[i].SerialNumber,
           "DeviceID": item[i].DeviceID.replace(/\\\\.\\/g, ''),
           "InterfaceType": item[i].InterfaceType,
@@ -254,8 +226,8 @@ function getLogicalDisk() {
       for(var i = 0; i < item.length; i++) {
         results.push({
           "Drive": item[i].Name,
-          "Size": dataValue(item[i].Size),
-          "FreeSpace": dataValue(item[i].FreeSpace),
+          "Size": helpers.dataValue(item[i].Size),
+          "FreeSpace": helpers.dataValue(item[i].FreeSpace),
           "VolumeName": item[i].VolumeName,
           "FileSystem": item[i].FileSystem,
           "SerialNumber": item[i].VolumeSerialNumber
@@ -301,7 +273,7 @@ function getMemoryDevice() {
           "Bank": item[i].BankLabel,
           "Speed": item[i].Speed,
           "ClockSpeed": item[i].ConfiguredClockSpeed,
-          "Capacity": dataValue(item[i].Capacity)
+          "Capacity": helpers.dataValue(item[i].Capacity)
         });
       }
       return resolve(results);
@@ -318,10 +290,10 @@ function getMemoryUsage() {
       let item = parser.parse(stdout);
       for(var i = 0; i < item.length; i++) {
         results.push({
-          "TotalMemorySize": dataValue(item[i].TotalVisibleMemorySize * 1024),
-          "FreeMemory": dataValue(item[i].FreePhysicalMemory * 1024),
-          "UsedMemory": dataValue(item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024),
-          "UsedPercent":  dataValue((item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024) / (item[i].TotalVisibleMemorySize * 1024) * 100) + '%'
+          "TotalMemorySize": helpers.dataValue(item[i].TotalVisibleMemorySize * 1024),
+          "FreeMemory": helpers.dataValue(item[i].FreePhysicalMemory * 1024),
+          "UsedMemory": helpers.dataValue(item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024),
+          "UsedPercent": helpers.dataValue((item[i].TotalVisibleMemorySize * 1024 - item[i].FreePhysicalMemory * 1024) / (item[i].TotalVisibleMemorySize * 1024) * 100) + '%'
         });
       }
       return resolve(results);
@@ -422,7 +394,7 @@ function getNetworkAdapter() {
           "Name": item[i].Name,
           "Description": item[i].Description,
           "MACAddress": item[i].MACAddress,
-          "Speed": dataValue(item[i].Speed) + '/s'
+          "Speed": helpers.netValue(item[i].Speed)
         });
         }
       }
@@ -433,22 +405,28 @@ function getNetworkAdapter() {
 
 function getNetworkIO() {
   return new Promise(function(resolve, reject) {
-    exec('wmic path Win32_PerfRawData_Tcpip_NetworkInterface', (error, stdout) => {
-      if (error) {
-        return reject(`network-info - exec error: ${error}`);
-      }
-      let item = parser.parse(stdout);
-      for(var i = 0; i < item.length; i++) {
-        results.push({
-          "Name": item[i].Name,
-          "BytesReceivedPersec": item[i].BytesReceivedPersec,
-          "ReceivedErrors": item[i].PacketsReceivedErrors,
-          "BytesSentPersec": item[i].BytesSentPersec,
-          "OutboundErrors": item[i].PacketsOutboundErrors,
-          "CurrentBandwidth": item[i].CurrentBandwidth
-        });
-      }
-      return resolve(results);
+    exec('wmic path Win32_PerfFormattedData_Tcpip_NetworkInterface', (error, stdout) => {
+      exec('wmic path Win32_PerfRawData_Tcpip_NetworkInterface', (error, std) => {
+        if (error) {
+          return reject(`network-io-info - exec error: ${error}`);
+        }
+        let item = parser.parse(stdout);
+        let items = parser.parse(std);
+        for(var i = 0; i < item.length; i++) {
+          for(var i = 0; i < items.length; i++) {
+            results.push({
+              "Name": item[i].Name,
+              "BytesReceivedTotal": helpers.netValue(items[i].BytesReceivedPersec),
+              "BytesReceivedPersec": helpers.netValue(item[i].BytesReceivedPersec),
+              "ReceivedErrors": item[i].PacketsReceivedErrors,
+              "BytesSentTotal": helpers.netValue(items[i].BytesSentPersec),
+              "BytesSentPersec": helpers.netValue(item[i].BytesSentPersec),
+              "OutboundErrors": item[i].PacketsOutboundErrors
+            });
+          }
+        }
+        return resolve(results);
+      });
     });
   });
 }
