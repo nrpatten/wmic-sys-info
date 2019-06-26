@@ -1,6 +1,6 @@
 # Wmic-Sys-Info
 [![MIT License](https://img.shields.io/github/license/nrpatten/wmic-sys-info.svg?color=success)](https://github.com/nrpatten/wmic-sys-info/blob/master/LICENSE)
-[![Git Version](https://img.shields.io/github/package-json/v/nrpatten/wmic-sys-info.svg?color=success)]()
+[![Git Version](https://img.shields.io/github/package-json/v/nrpatten/wmic-sys-info.svg?color=success)](https://github.com/nrpatten/wmic-sys-info/tree/master)
 [![Git Issues](https://img.shields.io/github/issues/nrpatten/wmic-sys-info.svg?color=success)](https://github.com/nrpatten/wmic-sys-info/issues)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/nrpatten/wmic-sys-info.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nrpatten/wmic-sys-info/context:javascript)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/nrpatten/wmic-sys-info.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nrpatten/wmic-sys-info/alerts/)

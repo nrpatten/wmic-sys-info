@@ -17,8 +17,6 @@ const helpers = require('./lib/helpers');
 const fs = require('fs');
 const results = [];
 
-let result;
-let unit;
 let res;
 
 function getNvidiaSmi() {
